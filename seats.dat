@@ -1,0 +1,13 @@
+FLIGHT,CATEGORY,SEAT NUMBER, IS Available
+AA123,First Class,1A,N/A
+AA123,First Class,1B,N/A
+AA123,Business Class,1C,A
+AA123,First Class,2A,A
+AA123,Business Class,2B,A
+UA456,Second Class,2C,A
+UA456,Second Class,2D,A
+DL789,First Class,3A,A
+DL789,Third Class,3B,A
+DL789,First Class,3C,A
+DL789,Third Class,4A,A
+DL789,Business Class,4B,A
