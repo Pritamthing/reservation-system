@@ -34,16 +34,13 @@ def customer_operations():
         print("\n Customer Actions:")
         print("1. View Flights")
         print("2. View Seats Availability")
-        print("3. View Reservation")
-        print("4. Exit")
-        choice = input("Enter your choice (1-4): ")
+        print("3. Exit")
+        choice = input("Enter your choice (1-3): ")
         if choice == "1":
             service.view_flights()
         elif choice == "2":
             service.view_seats()
         elif choice == "3":
-            service.view_reservation()
-        elif choice == "4":
             print("Goodbye!")
             break
         else:
@@ -56,11 +53,11 @@ def main_menu():
         print("1. Customer")
         print("2. Staff")
         print("3. Exit")
-        choice = input("Enter your choice (1-4): ")
+        choice = input("Enter your choice (1-3): ")
         if choice == "1":
             customer_operations()
         elif choice == "2":
-            password = input("Enter password:")
+            password = input("Enter password (Use 'staff' as password) : ")
             if password == "staff":
                 staff_operations()
             else:

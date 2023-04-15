@@ -96,51 +96,85 @@ def view_reservation():
     for reservation in reservations:
         print(reservation.get_info())
 
+
+def get_seats_from_flights(flight):
+    for seat in seats:
+        if seat.get_flight() == flight and seat.get_is_booked() != 'N/A':
+            print(seat.get_info())
+
 # implementation of view seats
 
 
 def view_seats():
-    print("\n\t Available Seats:")
+    view_flights()
+    choosen_flight = input("Enter Flight: ")
+    print(f"Available Seats for flight : {choosen_flight}")
+    get_seats_from_flights(choosen_flight)
+
+
+def get_available_flights(flight_from, flight_to):
+    is_flight_available = False
+    for flight in flights:
+        if (flight.get_origin() == flight_from and flight.get_destination() == flight_to):
+            is_flight_available = True
+            print(flight.get_info())
+    if is_flight_available == False:
+        print("No Flights available")
+    else:
+        return True
+
+
+def get_available_seats(choosen_flight, choosen_class):
+    is_seats_available = False
     for seat in seats:
-        # if seat.get_is_booked() == True:
-        print(seat.get_info())
+        if (seat.get_flight() == choosen_flight and seat.get_category() == choosen_class):
+            is_seats_available = True
+            print(seat.get_info())
+    if is_seats_available == False:
+        print("No Seats available")
+    else:
+        return True
 
 
 # implementation of make reservation function
 def make_reservation():
-    view_seats()
-    choosen_flight = input("Choose your flight : ")
-    choosen_seat = input("Choose your seat: ")
-    option = input(
-        f"Want to make reservation for new customer Y/N?: ")
-    if option == "Y":
-        view_customer()
-        choosen_customer = input(
-            f"Choose customer to book selected seat :{choosen_seat} : ")
-    else:
-        choosen_customer = create_customer()
+    view_flights()
+    choosen_flight_from = input("Choose Fligths From : ")
+    choosen_flight_to = input("Choose Fligths To : ")
+    is_flight_available = get_available_flights(
+        choosen_flight_from, choosen_flight_to)
+    if is_flight_available:
+        choosen_flight = input("Choose your  Fligth : ")
+        choosen_class = input("Choose Class: ")
+        is_seats_available = get_available_seats(choosen_flight, choosen_class)
+        if is_seats_available:
+            choosen_seat = input("Choose your seat: ")
+            print("====Enter Customer Details===")
+            choosen_customer = create_customer()
 
-    if is_reservation_valid(choosen_seat, choosen_customer):
-        if any(seat.get_flight() == choosen_flight for seat in seats):
-            if any(seat.get_seat_no() == choosen_seat for seat in seats):
-                for seat in seats:
-                    if seat.get_seat_no() == choosen_seat:
-                        # get last reservation
-                        last_reservation = reservations[len(reservations)-1]
-                        # Define the reservation data
-                        reservation = Reservations.Reservations(
-                            str(int(last_reservation.get_id())+1), seat.get_flight(), choosen_customer, choosen_seat)
-                        add_reservation_data(reservation)
-                        update_seats_availability(reservation, "N/A")
-                        break
-                print(
-                    f"RESERVATION SUCCESSFULL FOR THE CUSTOMER {choosen_customer}")
+            if is_reservation_valid(choosen_seat, choosen_customer):
+                if any(seat.get_flight() == choosen_flight for seat in seats):
+                    if any(seat.get_seat_no() == choosen_seat for seat in seats):
+                        for seat in seats:
+                            if seat.get_seat_no() == choosen_seat:
+                                # get last reservation
+                                last_reservation = reservations[len(
+                                    reservations)-1]
+                                # Define the reservation data
+                                reservation = Reservations.Reservations(
+                                    str(int(last_reservation.get_id())+1), seat.get_flight(), choosen_customer, choosen_seat)
+                                add_reservation_data(reservation)
+                                update_seats_availability(reservation, "N/A")
+                                break
+                        print(
+                            f"RESERVATION SUCCESSFULL FOR THE CUSTOMER {choosen_customer}")
+                    else:
+                        print(f"Choosen seat {choosen_seat} is not found")
+                else:
+                    print(f"Choosen flight {choosen_flight} is not found")
             else:
-                print(f"Choosen seat {choosen_seat} is not found")
-        else:
-            print(f"Choosen flight {choosen_flight} is not found")
-    else:
-        print(f"Reservation for multiple flights for same customer is not allowed")
+                print(
+                    f"Reservation for multiple flights for same customer is not allowed")
 # implementation of make reservation function
 
 
@@ -211,10 +245,10 @@ def view_customer():
 
 
 def create_customer():
-    name = input("Enter customer name: ")
-    address = input("Enter customer address: ")
-    phone = input("Enter customer phone: ")
-    emailaddress = input("Enter customer email: ")
+    name = input("Customer name: ")
+    address = input("Customer address: ")
+    phone = input("Customer phone: ")
+    emailaddress = input("Customer email: ")
     # CHECK FOR DUBLICATE EMAIL
     is_email_exists = False
 
